@@ -1,0 +1,80 @@
+openapi: 3.0.2
+info:
+  title: MoldON API V1
+  version: 1.0.0
+  description: |-
+    3D도면 이미지화
+    - 3D도면을 업로드하여 7개의 각도에서 보여지는 형상을 이미지로 다운로드 할 수 있는 기능입니다.
+  x-logo: 
+    url: 'https://myeonggwon.github.io/API_5/MoldON_logo.png'
+    altText: A Logo image of MoldON
+paths:
+  /Convert3DtoImages:
+    post:
+      summary: Convert3DtoImages
+      tags:
+        - 3D도면 이미지화
+      description: >-
+        3D 도면 이미지화
+      parameters: []
+      security:
+        - APIKeyAuth: []
+      responses:
+        '200':
+          description: successfully authenticated
+          content:
+            application/json:
+              schema:
+                type: file
+                items:
+                  $ref: '#/components/schemas/Response_Boundbox'
+        '201':
+          description: Undocumented
+          content:
+            application/json:
+              example:
+                error: Undocumented
+                status: 201
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              example:
+                error: unauthorized
+                status: 401
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestBody_Bbox'
+servers:
+  - url: http://ec2-52-79-123-200.ap-northeast-2.compute.amazonaws.com:8090/v1
+    description: Production server
+security:
+  - APIKeyAuth: []
+components:
+  securitySchemes:
+    APIKeyAuth:
+      type: apiKey
+      name: x-mold-apigw-api-key
+      in: header
+  schemas:
+    Response_Boundbox:
+      description: zip files of converted 7 images
+      type: file
+      properties:
+        zip파일:
+          description: 원본 파일명과 동일한 명의 zip파일
+    RequestBody_Bbox:
+      description: Request file-name and file
+      required: ["file_name", "file_3d"]
+      type: object
+      properties:
+        file_name:
+          type: string
+          description: 3D file 경로
+          example: "~/p_0b0c4a17-f7f6-45c5-867e-58db7e2ce2cb_1.igs"
+        file_3d:
+          type: file
+          format: binary
+          description: 실제 3D file(* stp, igs 파일만 가능)
