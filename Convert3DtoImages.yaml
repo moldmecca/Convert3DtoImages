@@ -6,7 +6,7 @@ info:
     3D도면 이미지화
     - 3D도면을 업로드하여 7개의 각도에서 보여지는 형상을 이미지로 다운로드 할 수 있는 기능입니다. 
   x-logo: 
-    url: 'https://myeonggwon.github.io/Convert3DtoImages/MoldON_logo.png'
+    url: 'https://moldmecca.github.io/Convert3DtoImages/MoldON_logo.png'
     altText: A Logo image of MoldON
 paths:
   /Convert3DtoImages:
@@ -29,19 +29,23 @@ paths:
                 items:
                   $ref: '#/components/schemas/Response_Boundbox'
         '201':
-          description: Undocumented
+          description: igs or stp 파일이 아닌 경우
           content:
             application/json:
               example:
-                error: Undocumented
-                status: 201
-        '401':
-          description: Unauthorized
+                detail : "Error : Only igs or stp files are supported." 
+        '403':
+          description: API KEY 오류
           content:
             application/json:
               example:
-                error: unauthorized
-                status: 401
+                detail: "The API-key is invalid." 
+        '501':
+          description: 이미지 변환 오류
+          content:
+            application/json:
+              example:
+                detail : " Error : error message"
       requestBody:
         content:
           application/json:
@@ -67,14 +71,10 @@ components:
           description: 원본 파일명과 동일한 명의 zip파일
     RequestBody_Bbox:
       description: Request file-name and file
-      required: ["file_name", "file_3d"]
+      required: ["file_3d"]
       type: object
       properties:
-        file_name:
-          type: string
-          description: 3D file 경로
-          example: "~/p_0b0c4a17-f7f6-45c5-867e-58db7e2ce2cb_1.igs"
         file_3d:
           type: file
           format: binary
-          description: 실제 3D file(**stp, igs 파일만 가능**)
+          description: 실제 도면 파일(**stp, igs 파일만 가능**)
