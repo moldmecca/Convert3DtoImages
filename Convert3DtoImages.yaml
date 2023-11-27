@@ -52,7 +52,7 @@ paths:
             schema:
               $ref: '#/components/schemas/RequestBody_Bbox'
 servers:
-  - url: http://ec2-52-79-123-200.ap-northeast-2.compute.amazonaws.com:8090/v1
+  - url: https://api.moldon.org/v1
     description: Production server
 security:
   - APIKeyAuth: []
